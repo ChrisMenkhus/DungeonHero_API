@@ -26,12 +26,23 @@ app.post('/register', (req, res) => {
 	const salt = bcrypt.genSaltSync(10);
 	const hash = bcrypt.hashSync(password, salt);	
 
-	knex('users')
-	.insert({user_id: user_id, name: name, email: email, hash: hash})
-	.returning('*')
-  	.then(user => {
-  		res.json(user[0]);
-  	})
+	knex('users').select('*')
+	.where({email: email})
+	.then(user => {
+		if (user[0])
+		res.json('user already exsists ' + email);
+		else {
+			knex('users')
+			.insert({user_id: user_id, name: name, email: email, hash: hash})
+			.returning('*')
+		  	.then(user => {
+		  		console.log('logged')
+		  		res.json(user[0]);
+		  	})
+		}
+	});
+
+	
 })
 
 app.post('/login', (req, res) => {
@@ -46,7 +57,7 @@ app.post('/login', (req, res) => {
   			console.log(user);
   		  	const isValid = bcrypt.compareSync(password, user[0].hash);
   		  	if (isValid)
-  		  	res.json(user[0].user_id);
+  		  	res.json(user[0]);
   		  	else 
   		  		throw 'password not valid'
   		}
@@ -57,6 +68,8 @@ app.post('/login', (req, res) => {
 })
 
 // data management 
+
+
 
 // create a blank character 
 app.post('/newhero', (req, res) => {
@@ -69,8 +82,38 @@ app.post('/newhero', (req, res) => {
   		knex('info')
 		.insert({name: name, hero_id: hero_id})
 		.returning('*')
-	  	.then(info => {
-	  		res.json(info);
+	  	.then((info) => {
+	  		knex('stats')
+	  		.insert({hero_id: hero_id})
+			.returning('*')
+			.then((stats)=>{
+				res.json(stats);
+			})
+	  	})
+  	})
+  	.catch(err => res.json(err))
+})
+
+// delete a character
+app.post('/deletehero', (req, res) => {
+	const {hero_id} = req.body;
+
+	knex('heroes')
+	.delete()
+	.where({hero_id: hero_id})
+  	.then(() => {	
+  		knex('info')
+		.delete()
+		.where({hero_id: hero_id})
+		.returning('*')
+	  	.then((info) => {
+	  		knex('stats')
+	  		.delete()
+	  		.where({hero_id: hero_id})
+			.returning('*')
+			.then((stats)=>{
+				res.json(stats);
+			})
 	  	})
   	})
   	.catch(err => res.json(err))
@@ -96,8 +139,60 @@ app.get('/heroes/:user_id', (req, res) => {
 // get info on a character
 app.get('/hero_info/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
+	knex('info').select('*')
+  	.where({hero_id: hero_id})
+  	.then(hero => {
+  		if (hero.length)
+  		{
+  		  	console.log(hero);
+  		  	res.json(hero[0]);
+  		}
+  		else
+  			{
+  				res.json('ERROR no hero')
+  			throw 'hero not valid'
+  			}
+  	})
+  	.catch(err => res.json(err))
+})
+
+// update info on a character
+app.post('/hero_info', (req, res) => {
+	const {hero_id, name, player, race, heroclass, alignment, deity, level, size, age, gender, height, weight, eyes, hair, herocolor, looks, about} = req.body;
+
+	knex('info')
+	.where({hero_id: hero_id})
+	.update({
+			player: player, 
+			name: name,
+			race: race,
+			heroclass: heroclass,
+			alignment: alignment,
+			deity: deity,
+			level: level,
+			size: size,
+			age: age,
+			gender: gender,
+			height: height,
+			weight: weight,
+			eyes: eyes,
+			hair: hair,
+			herocolor: herocolor,
+			looks: looks,
+			about: about
+		})
+	.returning('*')
+  	.then(info => {	
+  		res.json(info);
+  	})
+  	.catch(err => res.json(err))
+})
+
+// get stats on a character
+app.get('/hero_stats/:hero_id', (req, res) => {
+	const {hero_id} = req.params;
 	knex.select('*')
-  	.from('info')
+  	.from('stats')
   	.where({hero_id: hero_id})
   	.then(hero => {
   		if (hero.length)
@@ -105,19 +200,60 @@ app.get('/hero_info/:hero_id', (req, res) => {
   		  	res.json(hero[0]);
   		}
   		else
-  		throw 'user not valid'
+  		throw 'hero not valid'
   	})
   	.catch(err => res.json(err))
 })
 
-app.post('/hero_info', (req, res) => {
-	const {hero_id, player, race} = req.body;
+// update stats of a character 
+app.post('/hero_stats', (req, res) => {
+	const {
+		hero_id,
+		strength,
+		dexterity,
+		constitution,
+		intelligence,
+		wisdom,
+		charisma,
+		casterlevel,
+		fort,
+		reflex,
+		will,
+		hp,
+		ac,
+		touch,
+		cmd,
+		armortype,
+		speed,
+		initiative,
+		melee,
+		cmb,
+		ranged		
+	} = req.body;
 
-	knex('info')
+	knex('stats')
 	.where({hero_id: hero_id})
 	.update({
-			player: player, 
-			race: race
+			strength: strength,
+			dexterity: dexterity,
+			constitution: constitution,
+			intelligence: intelligence,
+			wisdom: wisdom,
+			charisma: charisma,
+			casterlevel: casterlevel,
+			fort: fort,
+			reflex: reflex,
+			will: will,
+			hp: hp,
+			ac: ac,
+			touch: touch,
+			cmd: cmd,
+			armortype: armortype,
+			speed: speed,
+			initiative: initiative,
+			melee: melee,
+			cmb: cmb,
+			ranged: ranged
 		})
 	.returning('*')
   	.then(info => {	
@@ -127,7 +263,6 @@ app.post('/hero_info', (req, res) => {
 })
 
 // app 
-
 app.listen(3000, () => {
 	console.log('app is running on port 3000');
 })
