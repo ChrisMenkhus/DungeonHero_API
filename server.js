@@ -52,6 +52,7 @@ app.post('/login', (req, res) => {
   	.from('users')
   	.where({email: email})
   	.then(user => {
+  		console.log(user);
   		if (user.length)
   		{
   			console.log(user);
@@ -260,7 +261,7 @@ app.post('/hero_stats', (req, res) => {
 })
 
 // app 
-app.listen(3000, () => {
-	console.log('app is running on port 3000');
-	console.log(process.env.DATABASE_URL)
+app.listen(process.env.PORT, () => {
+	console.log('app is running');
+	console.log(process.env.PORT);
 })
