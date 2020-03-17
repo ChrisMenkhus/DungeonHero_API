@@ -45,6 +45,10 @@ app.post('/register', (req, res) => {
 	});	
 })
 
+app.post('/test', (req, res) => {
+	res.json(res);
+})
+
 app.post('/login', (req, res) => {
 	const {email, password} = req.body;
 
