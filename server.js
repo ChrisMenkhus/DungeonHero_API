@@ -12,8 +12,7 @@ app.use(cors());
 const knex = require('knex')({
 	client: 'pg',
 	connection: {
-		sslmode: require,
-    	connectionString : process.env.DATABASE_URL,
+    	connectionString : String(process.env.DATABASE_URL) + 'ssl=require',
     	ssl: true
   	}
 });
