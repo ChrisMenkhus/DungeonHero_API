@@ -3,18 +3,20 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const uuidv4 = require('uuid/v4');
-const knex = require('knex')({
-	client: 'pg',
-	connection: {
-		host: 'localhost',
-		user: 'postgres',
-		password: '3p1d3m1c',
-		database: 'dungeonhero'
-	}
-});
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
+
+const knex = require('knex')({
+	client: 'pg',
+	connection: {
+    	connectionString : process.env.DATABASE_URL,
+    	ssl: true
+  	}
+});
+
 
 
 // account management
@@ -40,9 +42,7 @@ app.post('/register', (req, res) => {
 		  		res.json(user[0]);
 		  	})
 		}
-	});
-
-	
+	});	
 })
 
 app.post('/login', (req, res) => {
@@ -68,9 +68,6 @@ app.post('/login', (req, res) => {
 })
 
 // data management 
-
-
-
 // create a blank character 
 app.post('/newhero', (req, res) => {
 	const {user_id, name} = req.body;
@@ -265,4 +262,5 @@ app.post('/hero_stats', (req, res) => {
 // app 
 app.listen(3000, () => {
 	console.log('app is running on port 3000');
+	console.log(process.env.DATABASE_URL)
 })
