@@ -13,7 +13,7 @@ const knex = require('knex')({
 	client: 'pg',
 	connection: {
     	connectionString: process.env.DATABASE_URL,
-    	ssl: true
+    	rejectUnauthorized: false
   	}
 });
 
@@ -27,6 +27,8 @@ app.post('/register', (req, res) => {
 
 	const salt = bcrypt.genSaltSync(10);
 	const hash = bcrypt.hashSync(password, salt);	
+
+	console.log('REGISTER ATTEMPTED')
 
 	knex('users').select('*')
 	.where({email: email})
