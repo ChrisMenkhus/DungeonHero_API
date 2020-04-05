@@ -8,6 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+//testing git
 
 const knex = require('knex')({
 	client: 'pg',
@@ -50,8 +51,10 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
 	const {email, password} = req.body;
 
-	knex.select('*')
-  	.from('users')
+	console.log('LOGIN ATTEMPTED')
+
+
+	knex('users').select('*')
   	.where({email: email})
   	.then(user => {
   		console.log(user);
@@ -59,8 +62,10 @@ app.post('/login', (req, res) => {
   		{
   			console.log(user);
   		  	const isValid = bcrypt.compareSync(password, user[0].hash);
-  		  	if (isValid)
-  		  	res.json(user[0]);
+  		  	if (isValid) {
+				console.log('logged in')		  		
+				res.json(user[0]);  
+  		  	}
   		  	else 
   		  		throw 'password not valid'
   		}
@@ -79,8 +84,8 @@ app.post('/newhero', (req, res) => {
 	knex('heroes')
 	.insert({user_id: user_id, name: name, hero_id: hero_id})
   	.then(() => {	
-  		knex('info')
-		.insert({name: name, hero_id: hero_id})
+  		knex('details')
+		.insert({charactername: name, hero_id: hero_id})
 		.returning('*')
 	  	.then((info) => {
 	  		knex('stats')
@@ -102,7 +107,7 @@ app.post('/deletehero', (req, res) => {
 	.delete()
 	.where({hero_id: hero_id})
   	.then(() => {	
-  		knex('info')
+  		knex('details')
 		.delete()
 		.where({hero_id: hero_id})
 		.returning('*')
@@ -139,7 +144,7 @@ app.get('/heroes/:user_id', (req, res) => {
 // get info on a character
 app.get('/hero_info/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
-	knex('info').select('*')
+	knex('details').select('*')
   	.where({hero_id: hero_id})
   	.then(hero => {
   		if (hero.length)
@@ -160,11 +165,11 @@ app.get('/hero_info/:hero_id', (req, res) => {
 app.post('/hero_info', (req, res) => {
 	const {hero_id, name, player, race, heroclass, alignment, deity, level, size, age, gender, height, weight, eyes, hair, herocolor, looks, about} = req.body;
 
-	knex('info')
+	knex('details')
 	.where({hero_id: hero_id})
 	.update({
-			player: player, 
-			name: name,
+			playername: player, 
+			charactername: name,
 			race: race,
 			heroclass: heroclass,
 			alignment: alignment,
