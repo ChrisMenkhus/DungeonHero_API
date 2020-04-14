@@ -270,6 +270,10 @@ app.post('/hero_stats', (req, res) => {
 const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
+app.get('/', (req, res) => {
+	res.json('found server');
+})
+
 app.listen(port, host, () => {
 	console.log('app is running');
 	console.log('app is updated');
