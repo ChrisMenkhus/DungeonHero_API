@@ -18,8 +18,6 @@ const knex = require('knex')({
   	}
 });
 
-
-
 // account management
 
 app.post('/register', (req, res) => {
