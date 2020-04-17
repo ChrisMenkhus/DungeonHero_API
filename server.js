@@ -156,7 +156,7 @@ app.get('/hero_info/:hero_id', (req, res) => {
   			throw 'hero not valid'
   			}
   	})
-  	.catch(err => res.json(err))
+  	.catch(err => res.json('server error: hero not found'))
 })
 
 // update info on a character
@@ -188,7 +188,7 @@ app.post('/hero_info', (req, res) => {
   	.then(info => {	
   		res.json(info);
   	})
-  	.catch(err => res.json(err))
+  	.catch(err => res.json('server error: hero not found'))
 })
 
 // get stats on a character
