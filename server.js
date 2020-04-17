@@ -70,7 +70,7 @@ app.post('/login', (req, res) => {
   		else
   		throw 'username not valid'
   	})
-  	.catch(err => res.json(err))
+  	.catch(err => res.json('error'))
 })
 
 // data management 
