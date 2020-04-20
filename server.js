@@ -76,6 +76,7 @@ app.post('/login', (req, res) => {
 // Create new item
 app.post('/newitem', (req, res) => {
 	const {
+		heroid,
 		name,
 		type
 	} = req.body;
@@ -84,6 +85,7 @@ app.post('/newitem', (req, res) => {
 
 	knex('equipment')
 	.insert({
+		heroid: heroid,
 		itemid: itemid,
 		name: name,
 		type: type
