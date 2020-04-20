@@ -19,7 +19,6 @@ const knex = require('knex')({
 });
 
 // account management
-
 app.post('/register', (req, res) => {
 	const {name, email, password} = req.body;
 	const user_id = uuidv4();
@@ -55,7 +54,6 @@ app.post('/login', (req, res) => {
 	knex('users').select('*')
   	.where({email: email})
   	.then(user => {
-  		console.log(user);
   		if (user.length)
   		{
   			console.log(user);
@@ -74,6 +72,29 @@ app.post('/login', (req, res) => {
 })
 
 // data management 
+// equipment
+// Create new item
+app.post('/newitem', (req, res) => {
+	const {
+		name,
+		type
+	} = req.body;
+
+	const itemid = uuidv4();
+
+	knex('equipment')
+	.insert({
+		itemid: itemid,
+		name: name,
+		type: type
+	})
+	.returning('*')
+  	.then(info => {	
+  		res.json(info);
+  	})
+  	.catch(err => res.json(err))
+})
+
 // create a blank character 
 app.post('/newhero', (req, res) => {
 	const {user_id, name} = req.body;
