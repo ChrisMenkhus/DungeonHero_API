@@ -83,7 +83,7 @@ app.post('/newitem', (req, res) => {
 
 	const itemid = uuidv4();
 
-	knex('equipment')
+	knex('items')
 	.insert({
 		heroid: heroid,
 		itemid: itemid,
