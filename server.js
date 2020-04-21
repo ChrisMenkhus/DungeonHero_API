@@ -92,6 +92,7 @@ app.post('/newitem', (req, res) => {
 	})
 	.returning('*')
   	.then(info => {	
+  		console.log(info);
   		res.json(info);
   	})
   	.catch(err => res.json(err))
