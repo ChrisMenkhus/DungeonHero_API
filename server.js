@@ -141,9 +141,6 @@ app.post('/newitem', (req, res) => {
 	  	}
 
 	  	//responseArray = [weaponItems, armorItems, basicItems];
-
-
-	  	res.json([weaponItems, armorItems, basicItems]);
   	})
 	.catch(err => res.json(err))
 })
