@@ -95,52 +95,58 @@ app.post('/newitem', (req, res) => {
 		type: type
 	})
 	.returning('*')
-  	.then(items => {	
-  		console.log(items);
-  		if (type === 1) {
-	  		knex('weapons')
-	  		.insert({
-	  			weaponid: itemid,
-	  			name: name
-	  		})  			
-  		} else
-		if (type === 2) {
-	  		knex('armor')
-	  		.insert({
-	  			armorid: itemid,
-	  			name: name
-	  		})  			
-  		} else
-  		if (type === 3) {
-	  		knex('basicitems')
-	  		.insert({
-	  			basicitemid: itemid,
-	  			name: name
-	  		})  			
-  		}
+  	.then(oneitem => {	
+  		knex.select('*')
+  		.from('items')
+  		.returning('*')
+  		.then(items => {
+	  		console.log(items);
+	  		if (type === 1) {
+		  		knex('weapons')
+		  		.insert({
+		  			weaponid: itemid,
+		  			name: name
+		  		})  			
+	  		} else
+			if (type === 2) {
+		  		knex('armor')
+		  		.insert({
+		  			armorid: itemid,
+		  			name: name
+		  		})  			
+	  		} else
+	  		if (type === 3) {
+		  		knex('basicitems')
+		  		.insert({
+		  			basicitemid: itemid,
+		  			name: name
+		  		})  			
+	  		}
 
-  		if (items.length)
-  		{
-  			weaponItems = items.filter((item, i) => {
-  				if (item.type === 1) {
-  					return (item);
-  				}
-  			})
-  			armorItems = items.filter((item, i) => {
-  				if (item.type === 2) {
-  					return (item);
-  				}
-  			})
-  			basicItems = items.filter((item, i) => {
-  				if (item.type === 3) {
-  					return (item);
-  				}
-  			})
+	  		if (items.length)
+	  		{
+	  			weaponItems = items.filter((item, i) => {
+	  				if (item.type === 1) {
+	  					return (item);
+	  				}
+	  			})
+	  			armorItems = items.filter((item, i) => {
+	  				if (item.type === 2) {
+	  					return (item);
+	  				}
+	  			})
+	  			basicItems = items.filter((item, i) => {
+	  				if (item.type === 3) {
+	  					return (item);
+	  				}
+	  			})
 
-  			responseArray = [weaponItems, armorItems, basicItems];
+	  			responseArray = [weaponItems, armorItems, basicItems];
 
-  		  	res.json(responseArray);
-  		} else res.json('no items');
+	  		  	res.json(responseArray);
+	  		} else res.json('no items');
+  			
+  		})
   	})
   	.catch(err => res.json(err))
 })
