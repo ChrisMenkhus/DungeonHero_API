@@ -125,12 +125,12 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   					return (item);
   				}
   			})
-  			armorItems = items.map((item, i) => {
+  			armorItems = items.filter((item, i) => {
   				if (item.type === 2) {
   					return (item);
   				}
   			})
-  			basicItems = items.map((item, i) => {
+  			basicItems = items.filter((item, i) => {
   				if (item.type === 3) {
   					return (item);
   				}
