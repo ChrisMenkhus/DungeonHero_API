@@ -120,7 +120,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   	.then(items => {
   		if (items.length)
   		{
-  			weaponItems = items.map((item, i) => {
+  			weaponItems = items.filter((item, i) => {
   				if (item.type === 1) {
   					return (item);
   				}
