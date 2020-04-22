@@ -93,7 +93,31 @@ app.post('/newitem', (req, res) => {
 	.returning('*')
   	.then(info => {	
   		console.log(info);
-  		res.json(info);
+  		knex('weapons')
+  		.insert({
+  			weaponid: itemid,
+  			name: name
+  		})
+  		.returning('*')
+  		.then(wep => {
+  			res.json(wep);
+  		})
+  	})
+  	.catch(err => res.json(err))
+})
+
+app.get('/hero_equipment/:hero_id', (req, res) => {
+	const {hero_id} = req.params;
+	knex.select('*')
+  	.from('items')
+  	.where({hero_id: hero_id})
+  	.then(hero => {
+  		if (hero.length)
+  		{
+  		  	res.json(hero[0]);
+  		}
+  		else
+  		throw 'hero not valid'
   	})
   	.catch(err => res.json(err))
 })
