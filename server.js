@@ -98,6 +98,7 @@ app.post('/newitem', (req, res) => {
   	.then(oneitem => {	
   		knex.select('*')
   		.from('items')
+  		.where({heroid: heroid})
   		.returning('*')
   		.then(items => {
 	  		console.log(items);
@@ -145,7 +146,7 @@ app.post('/newitem', (req, res) => {
 
 	  		  	res.json(responseArray);
 	  		} else res.json('no items');
-  			
+
   		})
   	})
   	.catch(err => res.json(err))
