@@ -138,7 +138,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
 
   			responseArray = [weaponItems, armorItems, basicItems];
 
-  		  	res.json(weaponItems);
+  		  	res.json(responseArray);
   		}
   		else
   		throw 'hero not valid'
