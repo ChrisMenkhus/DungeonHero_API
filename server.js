@@ -116,9 +116,9 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   	.then(items => {
   		if (items.length)
   		{
-  			weaponItems = items.map((i, item) => {
+  			weaponItems = items.map((item, i) => {
   				console.log('i = ' + i);
-  				console.log('item = ' + item);
+  				console.log('item = ' + item.name);
   			})
 
   		  	res.json(items);
