@@ -87,6 +87,8 @@ app.post('/newitem', (req, res) => {
 
 	const itemid = uuidv4();
 
+
+
 	knex('items')
 	.insert({
 		heroid: heroid,
@@ -105,13 +107,28 @@ app.post('/newitem', (req, res) => {
 	  		if (type === 1) {
 		  		knex('weapons')
 		  		.insert({
+		  			heroid: heroid,
 		  			weaponid: itemid,
 		  			name: name
-		  		})  			
+		  		}) 
+		  		.then(none => {
+		  			knex.select('*')
+		  			.from('weapons')
+  					.where({heroid: heroid})
+  					.returning('*')
+  					.then(weapons => {
+  						weaponItems = weapons.filter((item, i) => {
+		  					if (item.type === 1) {
+		  						return (item);
+		  					}
+	  					})
+  					})
+		  		})		
 	  		} else
 			if (type === 2) {
 		  		knex('armor')
 		  		.insert({
+		  			heroid: heroid,
 		  			armorid: itemid,
 		  			name: name
 		  		})  			
@@ -119,33 +136,16 @@ app.post('/newitem', (req, res) => {
 	  		if (type === 3) {
 		  		knex('basicitems')
 		  		.insert({
+		  			heroid: heroid,
 		  			basicitemid: itemid,
 		  			name: name
 		  		})  			
 	  		}
 
-	  		if (items.length)
-	  		{
-	  			weaponItems = items.filter((item, i) => {
-	  				if (item.type === 1) {
-	  					return (item);
-	  				}
-	  			})
-	  			armorItems = items.filter((item, i) => {
-	  				if (item.type === 2) {
-	  					return (item);
-	  				}
-	  			})
-	  			basicItems = items.filter((item, i) => {
-	  				if (item.type === 3) {
-	  					return (item);
-	  				}
-	  			})
-
 	  			responseArray = [weaponItems, armorItems, basicItems];
 
 	  		  	res.json(responseArray);
-	  		} else res.json('no items');
+	  		
 
   		})
   	})
