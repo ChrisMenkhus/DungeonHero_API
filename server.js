@@ -95,7 +95,7 @@ app.post('/newitem', (req, res) => {
   		console.log(info);
   		knex('weapons')
   		.insert({
-  			weaponid: itemid,
+  			weaponid: 'fuckit',
   			name: name
   		})
   		.returning('*')
@@ -111,6 +111,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
 	knex.select('*')
   	.from('items')
   	.where({hero_id: hero_id})
+  	.returning('*')
   	.then(hero => {
   		if (hero.length)
   		{
