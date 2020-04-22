@@ -115,7 +115,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   	.then(hero => {
   		if (hero.length)
   		{
-  		  	res.json(hero[0]);
+  		  	res.json(hero);
   		}
   		else
   		throw 'hero not valid'
