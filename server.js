@@ -95,53 +95,52 @@ app.post('/newitem', (req, res) => {
 		type: type
 	})
   	.then(()=>{	
-	  		if (type === 1) {
-		  		knex('weapons')
-		  		.insert({
-		  			heroid: heroid,
-		  			weaponid: itemid,
-		  			name: name
-		  		}) 
-		  		.then(() => {
-		  			knex.select('*')
-		  			.from('weapons')
-  					.where({heroid: heroid})
-  					.returning('*')
-  					.then(weapons => {
-  						console.log('weapons: (111)')
-  						console.log(weapons);
-  						weaponItems = weapons;
-  					})
+	  	if (type === 1) {
+		  	knex('weapons')
+		  	.insert({
+		  		heroid: heroid,
+		  		weaponid: itemid,
+		  		name: name
+		  	}) 
+		  	.then(() => {
+		  		knex.select('*')
+		  		.from('weapons')
+  				.where({heroid: heroid})
+  				.returning('*')
+  				.then(weapons => {
+  					console.log('weapons: (111)')
+  					console.log(weapons);
+  					weaponItems = weapons;
+  				})
 		  		})		
-	  		} else
-			if (type === 2) {
-		  		knex('armor')
-		  		.insert({
-		  			heroid: heroid,
-		  			armorid: itemid,
-		  			name: name
-		  		})  			
-	  		} else
-	  		if (type === 3) {
-		  		knex('basicitems')
-		  		.insert({
-		  			heroid: heroid,
-		  			basicitemid: itemid,
-		  			name: name
-		  		})  			
-	  		}
-
+	  	} else
+		if (type === 2) {
+		  	knex('armor')
+		  	.insert({
+		  		heroid: heroid,
+		  		armorid: itemid,
+		  		name: name
+		  	})  			
+	  	} else
+	  	if (type === 3) {
+		  	knex('basicitems')
+		  	.insert({
+		  		heroid: heroid,
+		  		basicitemid: itemid,
+		  		name: name
+		  	})  			
+	  	}
+  	})
+  	.then(() => {
 	  		console.log('weapon items = ');
 	  		console.log(weaponItems);
 
 	  		responseArray = [weaponItems, armorItems, basicItems];
 
 	  		res.json(responseArray);
-	  		
 
-  		
   	})
-  	.catch(err => res.json(err))
+	.catch(err => res.json(err))
 })
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
