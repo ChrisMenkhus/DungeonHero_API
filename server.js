@@ -108,6 +108,8 @@ app.post('/newitem', (req, res) => {
   					.where({heroid: heroid})
   					.returning('*')
   					.then(weapons => {
+  						console.log('weapons: (111)')
+  						console.log(weapons);
   						weaponItems = weapons;
   					})
 		  		})		
