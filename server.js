@@ -108,9 +108,9 @@ app.post('/newitem', (req, res) => {
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
-	const weaponItems = [];
-	const armorItems = [];
-	const basicItems = [];
+	let weaponItems = [];
+	let armorItems = [];
+	let basicItems = [];
 
 
 	knex.select('*')
