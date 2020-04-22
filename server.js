@@ -111,7 +111,6 @@ app.post('/newitem', (req, res) => {
   					console.log('weapons: (111)')
   					weaponItems = weapons;
   					console.log(weaponItems);
-
   				})
 		  		})		
 	  	} else
@@ -131,6 +130,8 @@ app.post('/newitem', (req, res) => {
 		  		name: name
 		  	})  			
 	  	}
+
+	  	res.json([weaponItems, armorItems, basicItems]);
   	})
   	.then(() => {
 	  		console.log('weapon items = ');
