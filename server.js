@@ -74,6 +74,19 @@ app.post('/login', (req, res) => {
 // data management 
 // equipment
 // Create new item
+
+const getAllEquipment = (callback) => {
+	knex.select('*')
+	.from('weapons')
+  	.where({heroid: heroid})
+  	.returning('*')
+  	.then(weapons => {
+  		weaponItems = weapons;
+  		console.log(weaponItems);
+		callback(weaponItems);
+  	})
+}
+
 app.post('/newitem', (req, res) => {
 	const {
 		heroid,
@@ -102,17 +115,11 @@ app.post('/newitem', (req, res) => {
 		  		weaponid: itemid,
 		  		name: name
 		  	}) 
-		  	.then(() => {
-		  		knex.select('*')
-		  		.from('weapons')
-  				.where({heroid: heroid})
-  				.returning('*')
-  				.then(weapons => {
-  					console.log('weapons: (111)')
-  					weaponItems = weapons;
-  					console.log(weaponItems);
-  				})
-		  		})		
+		  	.then(()=>{
+		  		getAllEquipment((newArray)=>{
+	  				res.json([newArray, [], []]);		  			
+		  		})
+		  	})	
 	  	} else
 		if (type === 2) {
 		  	knex('armor')
@@ -131,16 +138,10 @@ app.post('/newitem', (req, res) => {
 		  	})  			
 	  	}
 
+	  	//responseArray = [weaponItems, armorItems, basicItems];
+
+
 	  	res.json([weaponItems, armorItems, basicItems]);
-  	})
-  	.then(() => {
-	  		console.log('weapon items = ');
-	  		console.log(weaponItems);
-
-	  		responseArray = [weaponItems, armorItems, basicItems];
-
-	  		res.json(responseArray);
-
   	})
 	.catch(err => res.json(err))
 })
