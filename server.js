@@ -110,7 +110,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
 	knex.select('*')
   	.from('items')
-  	.where({hero_id: hero_id})
+  	.where({heroid: hero_id})
   	.returning('*')
   	.then(hero => {
   		if (hero.length)
