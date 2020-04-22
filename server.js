@@ -95,7 +95,7 @@ app.post('/newitem', (req, res) => {
   		console.log(info);
   		knex('weapons')
   		.insert({
-  			weaponid: 'fuckit',
+  			weaponid: itemid,
   			name: name
   		})
   		.returning('*')
