@@ -109,8 +109,9 @@ app.post('/newitem', (req, res) => {
   				.returning('*')
   				.then(weapons => {
   					console.log('weapons: (111)')
-  					console.log(weapons);
   					weaponItems = weapons;
+  					console.log(weaponItems);
+
   				})
 		  		})		
 	  	} else
