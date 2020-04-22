@@ -117,11 +117,22 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   		if (items.length)
   		{
   			weaponItems = items.map((item, i) => {
-  				console.log('i = ' + i);
-  				console.log('item = ' + item.name);
+  				if (item.type === 1) {
+  					return (item);
+  				}
+  			})
+  			armorItems = items.map((item, i) => {
+  				if (item.type === 2) {
+  					return (item);
+  				}
+  			})
+  			basicItems = items.map((item, i) => {
+  				if (item.type === 3) {
+  					return (item);
+  				}
   			})
 
-  		  	res.json(items);
+  		  	res.json(weaponItems, armorItems, basicItems);
   		}
   		else
   		throw 'hero not valid'
