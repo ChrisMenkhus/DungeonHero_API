@@ -75,15 +75,14 @@ app.post('/login', (req, res) => {
 // equipment
 // Create new item
 
-const getAllEquipment = (callback) => {
+const getAllEquipment = (heroid, callback) => {
 	knex.select('*')
 	.from('weapons')
   	.where({heroid: heroid})
   	.returning('*')
   	.then(weapons => {
-  		weaponItems = weapons;
-  		console.log(weaponItems);
-		callback(weaponItems);
+  		console.log(weapons);
+		callback(weapons);
   	})
 }
 
@@ -116,7 +115,7 @@ app.post('/newitem', (req, res) => {
 		  		name: name
 		  	}) 
 		  	.then(()=>{
-		  		getAllEquipment((newArray)=>{
+		  		getAllEquipment(heroid, (newArray)=>{
 	  				res.json([newArray, [], []]);		  			
 		  		})
 		  	})	
