@@ -116,9 +116,12 @@ app.post('/newitem', (req, res) => {
 		  	}) 
 		  	.then(()=>{
 		  		getAllEquipment(heroid, (newArray)=>{
-	  				res.json([newArray, [], []]);		  			
+		  			console.log('THE NEW ARRAY IS');
+		  			console.log(newArray);
+	  				res.json([newArray, null, null]);		  			
 		  		})
 		  	})	
+		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
 		  	knex('armor')
