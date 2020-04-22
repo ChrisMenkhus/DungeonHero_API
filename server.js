@@ -108,14 +108,20 @@ app.post('/newitem', (req, res) => {
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
+	const weaponItems = [];
 	knex.select('*')
   	.from('items')
   	.where({heroid: hero_id})
   	.returning('*')
-  	.then(hero => {
-  		if (hero.length)
+  	.then(items => {
+  		if (items.length)
   		{
-  		  	res.json(hero);
+  			weaponItems = items.map((i, item) => {
+  				console.log('i = ' + i);
+  				console.log('item = ' + item);
+  			})
+
+  		  	res.json(items);
   		}
   		else
   		throw 'hero not valid'
