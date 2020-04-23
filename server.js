@@ -162,7 +162,7 @@ app.post('/newitem', (req, res) => {
 })
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
-	const {hero_id} = req.params;
+	const {heroid} = req.params;
 
 	console.log('getting all equipment');
 
