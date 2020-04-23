@@ -122,10 +122,6 @@ app.post('/newitem', (req, res) => {
 	
 	const itemid = uuidv4();
 
-	let weaponItems = [];
-	let armorItems = [];
-	let basicItems = [];
-
 	knex('items')
 	.insert({
 		heroid: heroid,
@@ -141,12 +137,6 @@ app.post('/newitem', (req, res) => {
 		  		weaponid: itemid,
 		  		name: name
 		  	}) 
-		  	.then(()=>{
-		  		console.log('added weapon and now going deeper')
-		  		getAllEquipment(heroid, (newArray)=>{
-	  				res.json(newArray);		  			
-		  		})
-		  	})	
 		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
@@ -156,13 +146,6 @@ app.post('/newitem', (req, res) => {
 		  		armorid: itemid,
 		  		name: name
 		  	})
-		  	.then(()=>{
-		  		console.log('added armor and now going deeper')
-
-		  		getAllEquipment(heroid, (newArray)=>{
-	  				res.json(newArray);		  			
-		  		})
-		  	})	
 		  	.catch(err => res.json(err))		
 	  	} else
 	  	if (type === 3) {
@@ -172,22 +155,54 @@ app.post('/newitem', (req, res) => {
 		  		basicitemid: itemid,
 		  		name: name
 		  	})
-		  	then(()=>{
-		  		console.log('added basic item and now going deeper')
-
-		  		getAllEquipment(heroid, (newArray)=>{
-	  				res.json(newArray);		  			
-		  		})
-		  	})	
 		  	.catch(err => res.json(err))  			
 	  	}
-
-	  	//responseArray = [weaponItems, armorItems, basicItems];
   	})
 	.catch(err => res.json(err))
 })
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
+	const {hero_id} = req.params;
+
+	console.log('getting all equipment');
+
+	let weaponItems = [];
+	let armorItems = [];
+	let basicItems = [];
+
+	knex.select('*')
+	.from('weapons')
+  	.where({heroid: heroid})
+  	.returning('*')
+  	.then(weapons => {
+  		console.log('got weapons')
+
+  		weaponItems = weapons;
+  		knex.select('*')
+		.from('armor')
+	  	.where({heroid: heroid})
+	  	.returning('*')
+	  	.then(armors => {
+  			console.log('got armor')
+
+	  		armorItems = armors;
+	  		knex.select('*')
+			.from('basicitems')
+	  		.where({heroid: heroid})
+	  		.returning('*')
+	  		.then(basicitems => {
+  				console.log('got basic items')
+
+	  			basicItems = basicitems;
+	  			res.json([weaponItems, armorItems, basicItems]);
+	  		})
+	  	})
+  	})
+  	.catch(err => res.json(err));	
+
+})
+
+app.get('/hero_equipment_OLD/:hero_id', (req, res) => {
 	const {hero_id} = req.params;
 	let weaponItems = [];
 	let armorItems = [];
