@@ -76,6 +76,7 @@ app.post('/login', (req, res) => {
 // Create new item
 
 const getAllEquipment = (heroid, callback) => {
+	  			console.log('getting all equipment');
 
 	let weaponItems = [];
 	let armorItems = [];
@@ -99,12 +100,11 @@ const getAllEquipment = (heroid, callback) => {
 	  		.returning('*')
 	  		.then(basicitems => {
 	  			basicItems = basicitems;
-	  			let newArray = [weapons, armors, basicitems];
-	  			console.log('getting all equipment');
 	  			callback([weaponItems, armorItems, basicItems]);
 	  		})
 	  	})
-  	})	
+  	})
+  	.catch(err => res.json(err));	
 } 
 
 app.post('/newitem', (req, res) => {
