@@ -157,6 +157,8 @@ app.post('/newitem', (req, res) => {
 		  		name: name
 		  	})
 		  	.then(()=>{
+		  		console.log('added armor and now going deeper')
+
 		  		getAllEquipment(heroid, (newArray)=>{
 	  				res.json(newArray);		  			
 		  		})
@@ -171,6 +173,8 @@ app.post('/newitem', (req, res) => {
 		  		name: name
 		  	})
 		  	then(()=>{
+		  		console.log('added basic item and now going deeper')
+
 		  		getAllEquipment(heroid, (newArray)=>{
 	  				res.json(newArray);		  			
 		  		})
