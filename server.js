@@ -101,6 +101,7 @@ const getAllEquipment = (heroid, callback) => {
 	  			basicItems = basicitems;
 	  			let newArray = [weapons, armors, basicitems];
 	  			console.log(newArray);
+	  			console.log(weaponItems);
 	  			callback(newArray);
 	  		})
 	  	})
