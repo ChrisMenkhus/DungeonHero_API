@@ -76,7 +76,7 @@ app.post('/login', (req, res) => {
 // Create new item
 
 const getAllEquipment = (heroid, callback) => {
-	  			console.log('getting all equipment');
+	console.log('getting all equipment');
 
 	let weaponItems = [];
 	let armorItems = [];
@@ -87,18 +87,24 @@ const getAllEquipment = (heroid, callback) => {
   	.where({heroid: heroid})
   	.returning('*')
   	.then(weapons => {
+  		console.log('got weapons')
+
   		weaponItems = weapons;
   		knex.select('*')
 		.from('armor')
 	  	.where({heroid: heroid})
 	  	.returning('*')
 	  	.then(armors => {
+  			console.log('got armor')
+
 	  		armorItems = armors;
 	  		knex.select('*')
 			.from('basicitems')
 	  		.where({heroid: heroid})
 	  		.returning('*')
 	  		.then(basicitems => {
+  				console.log('got basic items')
+
 	  			basicItems = basicitems;
 	  			callback([weaponItems, armorItems, basicItems]);
 	  		})
