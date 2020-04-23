@@ -103,12 +103,7 @@ const getAllEquipment = (heroid, callback) => {
 	  			callback(newArray);
 	  		})
 	  	})
-  	})
-		
-
-
-
-		
+  	})	
 } 
 
 app.post('/newitem', (req, res) => {
@@ -141,8 +136,6 @@ app.post('/newitem', (req, res) => {
 		  	}) 
 		  	.then(()=>{
 		  		getAllEquipment(heroid, (newArray)=>{
-		  			console.log('THE NEW ARRAY IS');
-		  			console.log(newArray);
 	  				res.json(newArray);		  			
 		  		})
 		  	})	
@@ -154,7 +147,13 @@ app.post('/newitem', (req, res) => {
 		  		heroid: heroid,
 		  		armorid: itemid,
 		  		name: name
-		  	})  			
+		  	})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newArray)=>{
+	  				res.json(newArray);		  			
+		  		})
+		  	})	
+		  	.catch(err => res.json(err))		
 	  	} else
 	  	if (type === 3) {
 		  	knex('basicitems')
@@ -162,7 +161,13 @@ app.post('/newitem', (req, res) => {
 		  		heroid: heroid,
 		  		basicitemid: itemid,
 		  		name: name
-		  	})  			
+		  	})
+		  	then(()=>{
+		  		getAllEquipment(heroid, (newArray)=>{
+	  				res.json(newArray);		  			
+		  		})
+		  	})	
+		  	.catch(err => res.json(err))  			
 	  	}
 
 	  	//responseArray = [weaponItems, armorItems, basicItems];
