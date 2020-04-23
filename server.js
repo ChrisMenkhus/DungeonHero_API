@@ -76,15 +76,40 @@ app.post('/login', (req, res) => {
 // Create new item
 
 const getAllEquipment = (heroid, callback) => {
+
+	let weaponItems = [];
+	let armorItems = [];
+	let basicItems = [];
+
 	knex.select('*')
 	.from('weapons')
   	.where({heroid: heroid})
   	.returning('*')
   	.then(weapons => {
-  		console.log(weapons);
-		callback(weapons);
+  		weaponItems = weapons;
+  		knex.select('*')
+		.from('armor')
+	  	.where({heroid: heroid})
+	  	.returning('*')
+	  	.then(armors => {
+	  		armorItems = armors;
+	  		knex.select('*')
+			.from('basicitems')
+	  		.where({heroid: heroid})
+	  		.returning('*')
+	  		.then(basicitems => {
+	  			basicItems = basicitems;
+	  			let newArray = [weaponItems, armorItems, basicItems];
+	  			callback(weapons);
+	  		})
+	  	})
   	})
-}
+		
+
+
+
+		
+} 
 
 app.post('/newitem', (req, res) => {
 	const {
@@ -118,7 +143,7 @@ app.post('/newitem', (req, res) => {
 		  		getAllEquipment(heroid, (newArray)=>{
 		  			console.log('THE NEW ARRAY IS');
 		  			console.log(newArray);
-	  				res.json([newArray, null, null]);		  			
+	  				res.json(newArray);		  			
 		  		})
 		  	})	
 		  	.catch(err => res.json(err))
