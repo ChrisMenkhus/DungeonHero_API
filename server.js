@@ -100,7 +100,7 @@ const getAllEquipment = (heroid, callback) => {
 	  		.then(basicitems => {
 	  			basicItems = basicitems;
 	  			let newArray = [weaponItems, armorItems, basicItems];
-	  			callback(weapons);
+	  			callback(newArray);
 	  		})
 	  	})
   	})
