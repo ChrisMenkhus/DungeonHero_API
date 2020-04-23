@@ -135,11 +135,11 @@ app.post('/newitem', (req, res) => {
 		  		weaponid: itemid,
 		  		name: name
 		  	}) 
-		  	.then(()=>{
+		  	.then(
 		  		getAllEquipment(heroid, (newArray)=>{
 	  				res.json(newArray);		  			
 		  		})
-		  	})	
+		  	)	
 		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
