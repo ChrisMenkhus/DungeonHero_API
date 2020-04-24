@@ -179,6 +179,7 @@ app.post('/newitem', (req, res) => {
 
 app.post('/delete_item', (req, res) => {
 	const {
+		heroid,
 		itemid,
 		type
 	} = req.body;
