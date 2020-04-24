@@ -82,12 +82,12 @@ app.post('/newskill', (req, res) => {
 		type
 	} = req.body;
 	
-	const itemid = uuidv4();
+	const skillid = uuidv4();
 
 	knex('skills')
 	.insert({
 		heroid: heroid,
-		itemid: itemid,
+		skillid: skillid,
 		name: name,
 		type: type
 	})
