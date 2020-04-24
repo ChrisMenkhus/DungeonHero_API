@@ -104,6 +104,26 @@ app.post('/newskill', (req, res) => {
 	.catch(err => res.json(err))
 })
 
+app.post('/delete_skill', (req, res) => {
+	const {
+		heroid,
+		skillid
+	} = req.body;
+	
+	knex('skills')
+	.delete()
+	.where({skillid: skillid})
+  	.then(()=>{	
+  		knex('skills').select('*')
+  		.where({heroid: heroid})
+  		.then(skills => {
+  			res.json(skills)
+  		})
+		.catch(err => res.json(err))
+  	})
+	.catch(err => res.json(err))
+})
+
 app.get('/hero_skills/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
 
