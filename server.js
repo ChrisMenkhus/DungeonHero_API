@@ -177,9 +177,10 @@ app.post('/newitem', (req, res) => {
 	.catch(err => res.json(err))
 })
 
-app.post('/deleteitem', (req, res) => {
+app.post('/delete_item', (req, res) => {
 	const {
-		itemid
+		itemid,
+		type
 	} = req.body;
 
 	knex('items')
@@ -189,7 +190,7 @@ app.post('/deleteitem', (req, res) => {
 	  	if (type === 1) {
 			knex('weapons')
 			.delete()
-			.where({itemid: itemid})
+			.where({weaponid: itemid})
 		  	.then(()=>{
 		  		getAllEquipment(heroid, (newarray)=>{
 		  			res.json(newarray);
@@ -200,7 +201,7 @@ app.post('/deleteitem', (req, res) => {
 		if (type === 2) {
 			knex('armor')
 			.delete()
-			.where({itemid: itemid})
+			.where({armorid: itemid})
 		  	.then(()=>{
 		  		getAllEquipment(heroid, (newarray)=>{
 		  			res.json(newarray);
@@ -211,7 +212,7 @@ app.post('/deleteitem', (req, res) => {
 	  	if (type === 3) {
 	  		knex('basicitems')
 			.delete()
-			.where({itemid: itemid})
+			.where({basicitemid: itemid})
 		  	.then(()=>{
 		  		getAllEquipment(heroid, (newarray)=>{
 		  			res.json(newarray);
