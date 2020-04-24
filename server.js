@@ -124,6 +124,24 @@ app.post('/delete_skill', (req, res) => {
 	.catch(err => res.json(err))
 })
 
+app.post('/update_skill', (req, res) => {
+	const {skillid, name, type, ranks, miscbonus, classskill} = req.body;
+
+	knex('skills')
+	.where({skillid: skillid})
+	.update({
+		name: name,
+		type: type,
+		ranks: ranks,
+		miscbonus: miscbonus,
+		classskill: classskill
+		})
+  	.then(() => {	
+  		res.json('updated item');
+  	})
+  	.catch(err => res.json('server error: skill not found'))
+})
+
 app.get('/hero_skills/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
 
