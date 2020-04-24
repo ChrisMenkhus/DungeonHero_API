@@ -227,7 +227,7 @@ app.post('/delete_item', (req, res) => {
 
 // update info on an item
 app.post('/update_weapon', (req, res) => {
-	const {itemid, name, description, damagediesides, damagediceamount, damagebonus, criticalmultiplier, criticalrangefrom, criticalrangeto, range, specialproperties, source, heroid} = req.body;
+	const {itemid, name, description, damagediesides, damagediceamount, damagebonus, criticalmultiplier, criticalrangefrom, criticalrangeto, range, specialproperties, source} = req.body;
 
 	knex('weapons')
 	.where({weaponid: itemid})
@@ -249,6 +249,44 @@ app.post('/update_weapon', (req, res) => {
   	})
   	.catch(err => res.json('server error: weapon not found'))
 })
+app.post('/update_armor', (req, res) => {
+	const {itemid, name, description, type, acbonus, maxdex, armorcheckpenalty, spellfailure, speed, source} = req.body;
+
+	knex('armor')
+	.where({armorid: itemid})
+	.update({
+		name: name,
+		description: description,
+		type: type, 
+		acbonus: acbonus, 
+		maxdex: maxdex, 
+		armorcheckpenalty: armorcheckpenalty, 
+		spellfailure: spellfailure, 
+		speed: speed,
+		source: source
+		})
+  	.then(() => {	
+  		res.json('updated item');
+  	})
+  	.catch(err => res.json('server error: armor not found'))
+})
+app.post('/update_basicitem', (req, res) => {
+	const {itemid, name, description, amount, source} = req.body;
+
+	knex('basicitems')
+	.where({basicitemid: itemid})
+	.update({
+		name: name,
+		description: description,
+		amount: amount,
+		source: source
+		})
+  	.then(() => {	
+  		res.json('updated item');
+  	})
+  	.catch(err => res.json('server error: basicitem not found'))
+})
+
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
