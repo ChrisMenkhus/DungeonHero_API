@@ -75,6 +75,49 @@ app.post('/login', (req, res) => {
 // equipment
 // Create new item
 
+app.post('/newskill', (req, res) => {
+	const {
+		heroid,
+		name,
+		type
+	} = req.body;
+	
+	const itemid = uuidv4();
+
+	knex('skills')
+	.insert({
+		heroid: heroid,
+		itemid: itemid,
+		name: name,
+		type: type
+	})
+  	.then(()=>{	
+  		knex('skills').select('*')
+  		.where({heroid: heroid})
+  		.then(skills => {
+  			console.log('SKILLS: ');
+  			console.log(skills);
+  			res.json(skills)
+  		})
+		.catch(err => res.json(err))
+  	})
+	.catch(err => res.json(err))
+})
+
+app.get('/hero_skills/:hero_id', (req, res) => {
+	const heroid = req.params.hero_id;
+
+  	knex('skills').select('*')
+  	.where({heroid: heroid})
+  	.then(skills => {
+  		console.log('SKILLS: ');
+  		console.log(skills);
+  		res.json(skills)
+  	})
+	.catch(err => res.json(err))
+})
+
+
 const getAllEquipment = (heroid, callback) => {
 	console.log('getting all equipment');
 
@@ -261,9 +304,8 @@ app.post('/update_armor', (req, res) => {
 		speed: speed,
 		source: source
 		})
-  	.then((item) => {	
-  		console.log(item);
-  		res.json(item);
+  	.then(() => {	
+  		res.json('updated armor');
   	})
   	.catch(err => res.json('server error: armor not found'))
 })
