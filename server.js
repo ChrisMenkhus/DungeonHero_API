@@ -82,26 +82,21 @@ const getAllEquipment = (heroid, callback) => {
 	let armorItems = [];
 	let basicItems = [];
 
-	knex.select('*')
-	.from('weapons')
+	knex('weapons').select('*')
   	.where({heroid: heroid})
-  	.returning('*')
   	.then(weapons => {
   		console.log('got weapons')
+  		console.log(weapons);
 
   		weaponItems = weapons;
-  		knex.select('*')
-		.from('armor')
+  		knex('armor').select('*')
 	  	.where({heroid: heroid})
-	  	.returning('*')
 	  	.then(armors => {
   			console.log('got armor')
 
 	  		armorItems = armors;
-	  		knex.select('*')
-			.from('basicitems')
+	  		knex('basicitems').select('*')
 	  		.where({heroid: heroid})
-	  		.returning('*')
 	  		.then(basicitems => {
   				console.log('got basic items')
 
@@ -110,12 +105,10 @@ const getAllEquipment = (heroid, callback) => {
 	  		})
 	  	})
   	})
-  	.catch(err => res.json(err));	
+  	.catch(err => res.json(err));		
 } 
 
 app.post('/newitem', (req, res) => {
-	console.log('trying new item')
-
 	const {
 		heroid,
 		name,
@@ -140,7 +133,12 @@ app.post('/newitem', (req, res) => {
 		  		heroid: heroid,
 		  		weaponid: itemid,
 		  		name: name
-		  	}) 
+		  	})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
+		  	})
 		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
@@ -151,6 +149,11 @@ app.post('/newitem', (req, res) => {
 		  		heroid: heroid,
 		  		armorid: itemid,
 		  		name: name
+		  	})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
 		  	})
 		  	.catch(err => res.json(err))		
 	  	} else
@@ -163,6 +166,11 @@ app.post('/newitem', (req, res) => {
 		  		basicitemid: itemid,
 		  		name: name
 		  	})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
+		  	})
 		  	.catch(err => res.json(err))  			
 	  	}
   	})
@@ -172,41 +180,46 @@ app.post('/newitem', (req, res) => {
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
 
-	console.log('getting all equipment');
+	getAllEquipment(heroid, (newarray)=>{
+		res.json(newarray)
+	})
 
-	let weaponItems = [];
-	let armorItems = [];
-	let basicItems = [];
-
-	knex('weapons').select('*')
-  	.where({heroid: heroid})
-  	.then(weapons => {
-  		console.log('got weapons')
-  		console.log(weapons);
-
-  		weaponItems = weapons;
-  		knex('armor').select('*')
-	  	.where({heroid: heroid})
-	  	.then(armors => {
-  			console.log('got armor')
-
-	  		armorItems = armors;
-	  		knex('basicitems').select('*')
-	  		.where({heroid: heroid})
-	  		.then(basicitems => {
-  				console.log('got basic items')
-
-	  			basicItems = basicitems;
-	  			res.json([weaponItems, armorItems, basicItems]);
-	  		})
-	  	})
-  	})
-  	.catch(err => res.json(err));	
+// 	console.log('getting all equipment');
+// 
+// 	let weaponItems = [];
+// 	let armorItems = [];
+// 	let basicItems = [];
+// 
+// 	knex('weapons').select('*')
+//   	.where({heroid: heroid})
+//   	.then(weapons => {
+//   		console.log('got weapons')
+//   		console.log(weapons);
+// 
+//   		weaponItems = weapons;
+//   		knex('armor').select('*')
+// 	  	.where({heroid: heroid})
+// 	  	.then(armors => {
+//   			console.log('got armor')
+// 
+// 	  		armorItems = armors;
+// 	  		knex('basicitems').select('*')
+// 	  		.where({heroid: heroid})
+// 	  		.then(basicitems => {
+//   				console.log('got basic items')
+// 
+// 	  			basicItems = basicitems;
+// 	  			res.json([weaponItems, armorItems, basicItems]);
+// 	  		})
+// 	  	})
+//   	})
+//   	.catch(err => res.json(err));	
 
 })
 
 app.get('/hero_equipment_OLD/:hero_id', (req, res) => {
-	const {hero_id} = req.params;
+	const {heroid} = req.params;
+	const hero_id = req.paramis.hero_id;
 	let weaponItems = [];
 	let armorItems = [];
 	let basicItems = [];
