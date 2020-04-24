@@ -263,7 +263,7 @@ app.post('/update_armor', (req, res) => {
 		})
   	.then((item) => {	
   		console.log(item);
-  		res.json('updated item');
+  		res.json(item);
   	})
   	.catch(err => res.json('server error: armor not found'))
 })
