@@ -114,6 +114,8 @@ const getAllEquipment = (heroid, callback) => {
 } 
 
 app.post('/newitem', (req, res) => {
+	console.log('trying new item')
+
 	const {
 		heroid,
 		name,
@@ -131,6 +133,8 @@ app.post('/newitem', (req, res) => {
 	})
   	.then(()=>{	
 	  	if (type === 1) {
+	  		console.log('weapon')
+
 		  	knex('weapons')
 		  	.insert({
 		  		heroid: heroid,
@@ -140,6 +144,8 @@ app.post('/newitem', (req, res) => {
 		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
+	  		console.log('armor')
+
 		  	knex('armor')
 		  	.insert({
 		  		heroid: heroid,
@@ -149,6 +155,8 @@ app.post('/newitem', (req, res) => {
 		  	.catch(err => res.json(err))		
 	  	} else
 	  	if (type === 3) {
+	  		console.log('basic')
+
 		  	knex('basicitems')
 		  	.insert({
 		  		heroid: heroid,
@@ -176,6 +184,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   	.returning('*')
   	.then(weapons => {
   		console.log('got weapons')
+  		console.log(weapons);
 
   		weaponItems = weapons;
   		knex.select('*')
