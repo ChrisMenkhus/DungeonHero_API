@@ -178,8 +178,7 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
 	let armorItems = [];
 	let basicItems = [];
 
-	knex.select('*')
-	.from('weapons')
+	knex('weapons').select('*')
   	.where({heroid: heroid})
   	.returning('*')
   	.then(weapons => {
@@ -187,16 +186,14 @@ app.get('/hero_equipment/:hero_id', (req, res) => {
   		console.log(weapons);
 
   		weaponItems = weapons;
-  		knex.select('*')
-		.from('armor')
+  		knex('armor').select('*')
 	  	.where({heroid: heroid})
 	  	.returning('*')
 	  	.then(armors => {
   			console.log('got armor')
 
 	  		armorItems = armors;
-	  		knex.select('*')
-			.from('basicitems')
+	  		knex('basicitems').select('*')
 	  		.where({heroid: heroid})
 	  		.returning('*')
 	  		.then(basicitems => {
