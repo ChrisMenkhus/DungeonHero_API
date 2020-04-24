@@ -242,13 +242,12 @@ app.post('/update_weapon', (req, res) => {
 		criticalrangeto: criticalrangeto,
 		range: range,
 		specialproperties: specialproperties,
-		source: source,
-		heroid: heroid
+		source: source
 		})
   	.then(() => {	
   		res.json('updated item');
   	})
-  	.catch(err => res.json('server error: hero not found'))
+  	.catch(err => res.json('server error: weapon not found'))
 })
 
 app.get('/hero_equipment/:hero_id', (req, res) => {
