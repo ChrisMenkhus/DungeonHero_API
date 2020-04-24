@@ -227,14 +227,14 @@ app.post('/delete_item', (req, res) => {
 
 // update info on an item
 app.post('/update_weapon', (req, res) => {
-	const {itemid, name, description, damagedicesides, damagediceamount, damagebonus, criticalmultiplier, criticalrangefrom, criticalrangeto, range, specialproperties, source, heroid} = req.body;
+	const {itemid, name, description, damagediesides, damagediceamount, damagebonus, criticalmultiplier, criticalrangefrom, criticalrangeto, range, specialproperties, source, heroid} = req.body;
 
 	knex('weapons')
 	.where({weaponid: itemid})
 	.update({
 		name: name,
 		description: description,
-		damagedicesides: damagedicesides,
+		damagediesides: damagediesides,
 		damagediceamount: damagediceamount,
 		damagebonus: damagebonus,
 		criticalmultiplier: criticalmultiplier,
