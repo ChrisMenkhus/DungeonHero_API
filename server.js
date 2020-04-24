@@ -223,6 +223,32 @@ app.post('/deleteitem', (req, res) => {
 	.catch(err => res.json(err))
 })
 
+// update info on an item
+app.post('/update_weapon', (req, res) => {
+	const {itemid, name, description, damagedicesides, damagediceamount, damagebonus, criticalmultiplier, criticalrangefrom, criticalrangeto, range, specialproperties, source, heroid} = req.body;
+
+	knex('weapons')
+	.where({weaponid: itemid})
+	.update({
+		name: name,
+		description: description,
+		damagedicesides: damagedicesides,
+		damagediceamount: damagediceamount,
+		damagebonus: damagebonus,
+		criticalmultiplier: criticalmultiplier,
+		criticalrangefrom: criticalrangefrom,
+		criticalrangeto: criticalrangeto,
+		range: range,
+		specialproperties: specialproperties,
+		source: source,
+		heroid: heroid
+		})
+  	.then(() => {	
+  		res.json('updated item');
+  	})
+  	.catch(err => res.json('server error: hero not found'))
+})
+
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
 
