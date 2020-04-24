@@ -85,20 +85,16 @@ const getAllEquipment = (heroid, callback) => {
 	knex('weapons').select('*')
   	.where({heroid: heroid})
   	.then(weapons => {
-  		console.log('got weapons')
-  		console.log(weapons);
 
   		weaponItems = weapons;
   		knex('armor').select('*')
 	  	.where({heroid: heroid})
 	  	.then(armors => {
-  			console.log('got armor')
 
 	  		armorItems = armors;
 	  		knex('basicitems').select('*')
 	  		.where({heroid: heroid})
 	  		.then(basicitems => {
-  				console.log('got basic items')
 
 	  			basicItems = basicitems;
 	  			callback([weaponItems, armorItems, basicItems]);
@@ -265,7 +261,9 @@ app.post('/update_armor', (req, res) => {
 		speed: speed,
 		source: source
 		})
-  	.then(() => {	
+	returning('*')
+  	.then((item) => {	
+  		console.log(item);
   		res.json('updated item');
   	})
   	.catch(err => res.json('server error: armor not found'))
