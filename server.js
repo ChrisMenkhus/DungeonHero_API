@@ -261,7 +261,6 @@ app.post('/update_armor', (req, res) => {
 		speed: speed,
 		source: source
 		})
-	returning('*')
   	.then((item) => {	
   		console.log(item);
   		res.json('updated item');
