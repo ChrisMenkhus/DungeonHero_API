@@ -177,85 +177,58 @@ app.post('/newitem', (req, res) => {
 	.catch(err => res.json(err))
 })
 
+app.post('/deleteitem', (req, res) => {
+	const {
+		itemid
+	} = req.body;
+
+	knex('items')
+	.delete()
+	.where({itemid: itemid})
+  	.then(()=>{	
+	  	if (type === 1) {
+			knex('weapons')
+			.delete()
+			.where({itemid: itemid})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
+		  	})
+		  	.catch(err => res.json(err))
+	  	} else
+		if (type === 2) {
+			knex('armor')
+			.delete()
+			.where({itemid: itemid})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
+		  	})
+		  	.catch(err => res.json(err))		
+	  	} else
+	  	if (type === 3) {
+	  		knex('basicitems')
+			.delete()
+			.where({itemid: itemid})
+		  	.then(()=>{
+		  		getAllEquipment(heroid, (newarray)=>{
+		  			res.json(newarray);
+		  		})
+		  	})
+		  	.catch(err => res.json(err))  			
+	  	}
+  	})
+	.catch(err => res.json(err))
+})
+
 app.get('/hero_equipment/:hero_id', (req, res) => {
 	const heroid = req.params.hero_id;
 
 	getAllEquipment(heroid, (newarray)=>{
 		res.json(newarray)
 	})
-
-// 	console.log('getting all equipment');
-// 
-// 	let weaponItems = [];
-// 	let armorItems = [];
-// 	let basicItems = [];
-// 
-// 	knex('weapons').select('*')
-//   	.where({heroid: heroid})
-//   	.then(weapons => {
-//   		console.log('got weapons')
-//   		console.log(weapons);
-// 
-//   		weaponItems = weapons;
-//   		knex('armor').select('*')
-// 	  	.where({heroid: heroid})
-// 	  	.then(armors => {
-//   			console.log('got armor')
-// 
-// 	  		armorItems = armors;
-// 	  		knex('basicitems').select('*')
-// 	  		.where({heroid: heroid})
-// 	  		.then(basicitems => {
-//   				console.log('got basic items')
-// 
-// 	  			basicItems = basicitems;
-// 	  			res.json([weaponItems, armorItems, basicItems]);
-// 	  		})
-// 	  	})
-//   	})
-//   	.catch(err => res.json(err));	
-
-})
-
-app.get('/hero_equipment_OLD/:hero_id', (req, res) => {
-	const {heroid} = req.params;
-	const hero_id = req.paramis.hero_id;
-	let weaponItems = [];
-	let armorItems = [];
-	let basicItems = [];
-
-
-	knex.select('*')
-  	.from('items')
-  	.where({heroid: hero_id})
-  	.returning('*')
-  	.then(items => {
-  		if (items.length)
-  		{
-  			weaponItems = items.filter((item, i) => {
-  				if (item.type === 1) {
-  					return (item);
-  				}
-  			})
-  			armorItems = items.filter((item, i) => {
-  				if (item.type === 2) {
-  					return (item);
-  				}
-  			})
-  			basicItems = items.filter((item, i) => {
-  				if (item.type === 3) {
-  					return (item);
-  				}
-  			})
-
-  			responseArray = [weaponItems, armorItems, basicItems];
-
-  		  	res.json(responseArray);
-  		}
-  		else
-  		throw 'hero not valid'
-  	})
-  	.catch(err => res.json(err))
 })
 
 // create a blank character 
@@ -293,13 +266,33 @@ app.post('/deletehero', (req, res) => {
 		.delete()
 		.where({hero_id: hero_id})
 		.returning('*')
-	  	.then((info) => {
+	  	.then(() => {
 	  		knex('stats')
 	  		.delete()
 	  		.where({hero_id: hero_id})
 			.returning('*')
-			.then((stats)=>{
-				res.json(stats);
+			.then(()=>{
+				knex('items')
+				.delete()
+				.where({heroid: hero_id})
+				.then(()=>{
+					knex('weapons')
+					.delete()
+					.where({heroid: hero_id})
+					.then(()=>{
+						knex('armor')
+						.delete()
+						.where({heroid: hero_id})
+						.then(()=>{
+							knex('basicitems')
+							.delete()
+							.where({heroid: hero_id})
+							.then(()=>{
+								res.json('deleted');
+							})
+						})
+					})
+				})
 			})
 	  	})
   	})
