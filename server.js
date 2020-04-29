@@ -137,7 +137,7 @@ app.post('/update_skill', (req, res) => {
 		classskill: classskill
 		})
   	.then(() => {	
-  		res.json('updated item');
+  		res.json('updated skill');
   	})
   	.catch(err => res.json('server error: skill not found'))
 })
@@ -557,7 +557,7 @@ app.post('/hero_stats', (req, res) => {
 		reflexmiscmod,
 		basewillmod,
 		willmiscmod,
-		initiavemiscmod,
+		initiativemiscmod,
 		movementspeed,
 		damagetaken	
 	} = req.body;
@@ -591,7 +591,7 @@ app.post('/hero_stats', (req, res) => {
 			reflexmiscmod: reflexmiscmod,
 			basewillmod: basewillmod,
 			willmiscmod: willmiscmod,
-			initiavemiscmod: initiavemiscmod,
+			initiativemiscmod: initiativemiscmod,
 			movementspeed: movementspeed,
 			damagetaken: damagetaken
 		})
