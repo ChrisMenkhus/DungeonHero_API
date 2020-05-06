@@ -22,11 +22,8 @@ const knex = require('knex')({
 app.post('/register', (req, res) => {
 	const {name, email, password} = req.body;
 	const user_id = uuidv4();
-
 	const salt = bcrypt.genSaltSync(10);
 	const hash = bcrypt.hashSync(password, salt);	
-
-	console.log('REGISTER ATTEMPTED')
 
 	knex('users').select('*')
 	.where({email: email})
@@ -38,7 +35,6 @@ app.post('/register', (req, res) => {
 			.insert({user_id: user_id, name: name, email: email, hash: hash})
 			.returning('*')
 		  	.then(user => {
-		  		console.log('logged')
 		  		res.json(user[0]);
 		  	})
 		}
@@ -48,18 +44,13 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
 	const {email, password} = req.body;
 
-	console.log('LOGIN ATTEMPTED')
-
-
 	knex('users').select('*')
   	.where({email: email})
   	.then(user => {
   		if (user.length)
   		{
-  			console.log(user);
   		  	const isValid = bcrypt.compareSync(password, user[0].hash);
-  		  	if (isValid) {
-				console.log('logged in')		  		
+  		  	if (isValid) {		  		
 				res.json(user[0]);  
   		  	}
   		  	else 
@@ -95,8 +86,6 @@ app.post('/newskill', (req, res) => {
   		knex('skills').select('*')
   		.where({heroid: heroid})
   		.then(skills => {
-  			console.log('SKILLS: ');
-  			console.log(skills);
   			res.json(skills)
   		})
 		.catch(err => res.json(err))
@@ -148,8 +137,6 @@ app.get('/hero_skills/:hero_id', (req, res) => {
   	knex('skills').select('*')
   	.where({heroid: heroid})
   	.then(skills => {
-  		console.log('SKILLS: ');
-  		console.log(skills);
   		res.json(skills)
   	})
 	.catch(err => res.json(err))
@@ -157,8 +144,6 @@ app.get('/hero_skills/:hero_id', (req, res) => {
 
 
 const getAllEquipment = (heroid, callback) => {
-	console.log('getting all equipment');
-
 	let weaponItems = [];
 	let armorItems = [];
 	let basicItems = [];
@@ -203,8 +188,6 @@ app.post('/newitem', (req, res) => {
 	})
   	.then(()=>{	
 	  	if (type === 1) {
-	  		console.log('weapon')
-
 		  	knex('weapons')
 		  	.insert({
 		  		heroid: heroid,
@@ -219,8 +202,6 @@ app.post('/newitem', (req, res) => {
 		  	.catch(err => res.json(err))
 	  	} else
 		if (type === 2) {
-	  		console.log('armor')
-
 		  	knex('armor')
 		  	.insert({
 		  		heroid: heroid,
@@ -235,8 +216,6 @@ app.post('/newitem', (req, res) => {
 		  	.catch(err => res.json(err))		
 	  	} else
 	  	if (type === 3) {
-	  		console.log('basic')
-
 		  	knex('basicitems')
 		  	.insert({
 		  		heroid: heroid,
@@ -466,7 +445,6 @@ app.get('/hero_info/:hero_id', (req, res) => {
   	.then(hero => {
   		if (hero.length)
   		{
-  		  	console.log(hero);
   		  	res.json(hero[0]);
   		}
   		else
@@ -612,8 +590,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, host, () => {
-	console.log('app is running');
-	console.log('app is updated');
-
-	console.log(process.env.PORT);
+	console.log('app is running on ' + process.env.PORT);
 })
